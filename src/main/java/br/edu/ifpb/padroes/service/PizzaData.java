@@ -22,5 +22,4 @@ public class PizzaData implements PizzaLib {
 		// TODO Auto-generated method stub
 		return cachePizzaHot;
 	}
-
 }
