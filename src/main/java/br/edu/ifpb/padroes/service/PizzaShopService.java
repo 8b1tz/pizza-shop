@@ -1,5 +1,7 @@
 package br.edu.ifpb.padroes.service;
 
+import java.util.List;
+
 import br.edu.ifpb.padroes.api.damenos.DamenosPizza;
 import br.edu.ifpb.padroes.api.damenos.DamenosServiceImpl;
 import br.edu.ifpb.padroes.api.damenos.proxy.DamenosService;
@@ -8,20 +10,16 @@ import br.edu.ifpb.padroes.api.pizzahot.PizzaHotServiceImpl;
 import br.edu.ifpb.padroes.api.pizzahot.proxy.PizzaHotService;
 import br.edu.ifpb.padroes.domain.Pizza;
 
-import java.util.List;
-
-public class PizzaShopService implements PizzaShopBase{
-
+public class PizzaShopService implements PizzaShopBase,  PizzaLib{
+	
+	private PizzaCacheProxy proxy; 
     private DamenosService damenosService;
     private PizzaHotService pizzaHotService;
 
     public PizzaShopService() {
-        // TODO - alterar criação de instância para chamar para o Proxy de Cache
-        damenosService = new DamenosServiceImpl();
-        pizzaHotService = new PizzaHotServiceImpl();
+        this.proxy = new PizzaCacheProxy();
     }
 
-    // TODO - implementar decorator para não precisar atributos da pizza como parâmetros no método
     public void orderPizza(Pizza pizza) {
 
         Float totalPrice = pizza.getPrice();
@@ -34,14 +32,16 @@ public class PizzaShopService implements PizzaShopBase{
     }
 
     // TODO - implementar adapter para unificar pizzas vindas das APIs Damenos e PizzaHot num único método getPizzas()
-    // TODO - public List<Pizza> getPizzas() {}
-
+   
+    @Override
     public List<DamenosPizza> getPizzasDamenos() {
-        return damenosService.getPizzas();
+        return proxy.getPizzasDamenos();
     }
-
+  
+	@Override
     public List<PizzaHotPizza> getPizzasPizzaHot() {
-        return pizzaHotService.getPizzas();
+        return proxy.getPizzasPizzaHot();
     }
 
+	
 }
